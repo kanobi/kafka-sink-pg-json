@@ -81,6 +81,18 @@ public class PostgreSQLSinkConnector extends SinkConnector {
     //do nothing
   }//initialize() 
 
+  @Override
+  public ConfigDef config() {
+    return CONFIG_DEF;
+  }
+
+  @Override
+  public Config validate(Map<String, String> connectorConfigs) {
+    ConfigDef configDef = config();
+    List<ConfigValue> configValues = configDef.validate(connectorConfigs);
+    return new Config(configValues);
+  }
+
   /**
    * Start the connector
    * @param props connector configuration properties
