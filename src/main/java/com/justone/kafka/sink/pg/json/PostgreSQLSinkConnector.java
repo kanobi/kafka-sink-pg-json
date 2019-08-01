@@ -32,6 +32,9 @@ import java.util.Map;
 import org.apache.kafka.connect.connector.ConnectorContext;
 import org.apache.kafka.connect.connector.Task;
 import org.apache.kafka.connect.sink.SinkConnector;
+import org.apache.kafka.common.config.Config;
+import org.apache.kafka.common.config.ConfigDef;
+import org.apache.kafka.common.config.ConfigValue;
 
 /**
  * Kafka sink connector for PostgreSQL
@@ -41,6 +44,21 @@ import org.apache.kafka.connect.sink.SinkConnector;
  * 
  */
 public class PostgreSQLSinkConnector extends SinkConnector {
+  
+  private static final ConfigDef CONFIG_DEF = new ConfigDef();
+
+  @Override
+  public ConfigDef config() {
+    return CONFIG_DEF;
+  }
+
+  @Override
+  public Config validate(Map<String, String> connectorConfigs) {
+      ConfigDef configDef = config();
+      List<ConfigValue> configValues = configDef.validate(connectorConfigs);
+      return new Config(configValues);
+  }
+
   /**
    * Version of the connector
    */
@@ -80,18 +98,6 @@ public class PostgreSQLSinkConnector extends SinkConnector {
               List<Map<String,String>> taskConfigs) {
     //do nothing
   }//initialize() 
-
-  @Override
-  public ConfigDef config() {
-    return CONFIG_DEF;
-  }
-
-  @Override
-  public Config validate(Map<String, String> connectorConfigs) {
-    ConfigDef configDef = config();
-    List<ConfigValue> configValues = configDef.validate(connectorConfigs);
-    return new Config(configValues);
-  }
 
   /**
    * Start the connector
